@@ -1,5 +1,4 @@
 <h1>CAT-Audio-Box</h1>
-====================
 
 Multi 'slot' audio recorder / player built on top of 'The Amazing Audio Engine' by Michael Tyson.
 
