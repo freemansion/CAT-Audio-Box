@@ -17,7 +17,7 @@ Created to replace the multiple AVAudioRecorders I had in one of my apps. CAT-Au
 <h2>License:</h2>
 
 CATAudioBox Copyright (C) 2013-2014 Carl Taylor
-TAAE Copyright (C) 2012-2014 A Tasty Pixel
+<p>TAAE Copyright (C) 2012-2014 A Tasty Pixel</p>
 
 This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.
 
