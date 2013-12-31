@@ -7,7 +7,7 @@ Created to replace the multiple AVAudioRecorders I had in one of my apps. CAT-Au
 <h2>Features:</h2>
 <ul>
 <li>User specified number of recording 'slots'</li>
-<li>Temp Recording to documents folder with finsihed set of audio files presented as NSDict of NSData</li>
+<li>Temp recording to documents folder with finsihed set of audio files presented as NSDict of NSData</li>
 <li>Auto recording stop and volume fade out</li>
 <li>Compression / limiting / high pass filtering of audio via configurable Audio Units</li>
 <li>Wav / Aiff / M4a / MP3 (osx) formats</li>
