@@ -2,7 +2,7 @@
 
 Multi 'slot' audio recorder / player built on top of 'The Amazing Audio Engine' by Michael Tyson.
 
-Created to replace the multiple AVAudioRecorders I had in one of my apps. CAT-Audio-Box records and plays singular tracks in the same style as a traditional tape recorder, but benefits from the additional features / expandability of CoreAudio. 
+Created to replace the multiple AVAudioRecorders I had in one of my apps. CAT-Audio-Box records or plays one track at a time in the same style as a traditional tape recorder, but benefits from the additional features / expandability of CoreAudio. 
 
 <h2>Features:</h2>
 <ul>
