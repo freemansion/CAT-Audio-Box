@@ -78,7 +78,7 @@
     
     for (int i = 0; i < capacity; i++) {
         NSString *key = [NSString stringWithFormat:@"%d", i];
-        [self.recordedFilesTrackerDict setObject:@NO forKey:key];
+        [self.recordedFilesTrackerDict setObject:[NSNumber numberWithBool:NO] forKey:key];
     }
 }
 
@@ -309,13 +309,15 @@
 -(BOOL)audioFilePresentForSlotNumber:(int)slotNumber
 {
     NSString *recordedSlotKey = [NSString stringWithFormat:@"%d",slotNumber];
-    return [[self.recordedFilesTrackerDict valueForKey:recordedSlotKey]boolValue];
+    BOOL audioExists = [[self.recordedFilesTrackerDict valueForKey:recordedSlotKey]boolValue];
+    return audioExists;
 }
 
 -(void)removeAudioFileForSlotNumber:(int)slotNumber;
 {
     if (slotNumber <= self.numberOfrecordingSlotsAvailable) {
-        [self.recordedFilesTrackerDict setObject:@NO forKey:[NSNumber numberWithInt:slotNumber]];
+        NSString *key = [NSString stringWithFormat:@"%d", slotNumber];
+        [self.recordedFilesTrackerDict setObject:[NSNumber numberWithBool:NO] forKey:key];
         [self removeFileAtFilePath:[self.tempFilePathsArray objectAtIndex:slotNumber]];
     } else {
         [self showLogMessageUserIsTryingToUseSlotOutOfRange];
@@ -355,7 +357,7 @@
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
-    [fileManager removeItemAtPath:filePath error:&error];   
+    [fileManager removeItemAtPath:filePath error:&error];
 }
 
 #pragma mark - Messages
