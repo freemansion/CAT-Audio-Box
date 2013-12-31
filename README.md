@@ -26,7 +26,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 <ol>
 <li>The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.</li>
 
-<li>Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.</li>
+<p><li>Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.</li></p>
 
-<li>This notice may not be removed or altered from any source distribution.</li>
-</ol>
+<p><li>This notice may not be removed or altered from any source distribution.</li>
+</ol></p>
