@@ -8,29 +8,39 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol CATAudioBoxProtocol <NSObject>
+// ** Audio Format ** //
+typedef enum {
+    CATAUDIO_BOX_FORMAT_MP3, // < OSX only
+    CATAUDIO_BOX_FORMAT_M4A,
+    CATAUDIO_BOX_FORMAT_MP4,
+    CATAUDIO_BOX_FORMAT_AAC,
+    CATAUDIO_BOX_FORMAT_AIFF,
+    CATAUDIO_BOX_FORMAT_WAV
+} CATAUDIO_BOX_AUDIO_FORMAT;
 
+// ** Error Codes ** //
+typedef  enum {
+    CATAUDIO_BOX_ERROR_PLAYBACK,
+    CATAUDIO_BOX_ERROR_RECORDING
+} CATAUDIO_BOX_ERROR_CODE;
+
+
+@protocol CATAudioBoxDelegate <NSObject>
 @optional
 
 -(void)CATAudioBoxDidFinishPlaying;
 -(void)CATAudioBoxDidFinishRecording;
+-(void)CATAudioBoxError:(CATAUDIO_BOX_ERROR_CODE)errorCode;
 
 @end
 
-typedef enum {
-    CATAUDIO_CONTROLLER_FORMAT_MP3, // < OSX only
-    CATAUDIO_CONTROLLER_FORMAT_M4A,
-    CATAUDIO_CONTROLLER_FORMAT_AIFF,
-    CATAUDIO_CONTROLLER_FORMAT_WAV
-} CATAUDIO_CONTROLLER_AUDIO_FORMAT;
-
 @interface CATAudioBox : NSObject
 
-@property (nonatomic, weak) id<CATAudioBoxProtocol>delegate;
+@property (nonatomic, weak) id<CATAudioBoxDelegate>delegate;
 
 @property (nonatomic, strong) NSNumber *maxRecordingTime;
 
--(id)initWithNumberOfRecordingSlots:(int)recordingSlots andRecordingFormat:(CATAUDIO_CONTROLLER_AUDIO_FORMAT)recordingFormat;
+-(id)initWithNumberOfRecordingSlots:(int)recordingSlots andRecordingFormat:(CATAUDIO_BOX_AUDIO_FORMAT)recordingFormat;
 
 // ** Audio Operations ** //
 -(BOOL)recordAudioForSlotNumber:(int)slotNumber;

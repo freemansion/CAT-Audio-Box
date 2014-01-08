@@ -9,7 +9,7 @@
 #import "CATViewController.h"
 #import "CATAudioBox.h"
 
-@interface CATViewController () <CATAudioBoxProtocol>
+@interface CATViewController () <CATAudioBoxDelegate>
 
 @property (nonatomic, strong) CATAudioBox *audioBox;
 
@@ -38,7 +38,7 @@
 
 -(void)initializeAudioBox
 {
-    self.audioBox = [[CATAudioBox alloc]initWithNumberOfRecordingSlots:10 andRecordingFormat:CATAUDIO_CONTROLLER_FORMAT_AIFF];
+    self.audioBox = [[CATAudioBox alloc]initWithNumberOfRecordingSlots:10 andRecordingFormat:CATAUDIO_BOX_FORMAT_AIFF];
     self.audioBox.maxRecordingTime = @5;
     self.audioBox.delegate = self;
 }
@@ -115,6 +115,20 @@
 {
     NSLog(@"Did Finish Recording");
     [self showButtons];
+}
+
+-(void)CATAudioBoxError:(CATAUDIO_BOX_ERROR_CODE)errorCode
+{
+    switch (errorCode) {
+        case CATAUDIO_BOX_ERROR_PLAYBACK:
+            NSLog(@"PlayBack Error");
+            break;
+        case CATAUDIO_BOX_ERROR_RECORDING:
+            NSLog(@"Recording Error");
+            break;
+        default:
+            break;
+    }
 }
 
 @end

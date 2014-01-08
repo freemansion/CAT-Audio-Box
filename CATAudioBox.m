@@ -28,7 +28,7 @@
 
 @property int numberOfrecordingSlotsAvailable;
 
-@property CATAUDIO_CONTROLLER_AUDIO_FORMAT recordingFormat;
+@property CATAUDIO_BOX_AUDIO_FORMAT recordingFormat;
 
 @end
 
@@ -36,13 +36,12 @@
 
 #pragma mark - Initialzsation
 
--(id)initWithNumberOfRecordingSlots:(int)recordingSlots andRecordingFormat:(CATAUDIO_CONTROLLER_AUDIO_FORMAT)recordingFormat;
+-(id)initWithNumberOfRecordingSlots:(int)recordingSlots andRecordingFormat:(CATAUDIO_BOX_AUDIO_FORMAT)recordingFormat;
 {
     self = [super init];
     if (self != nil) {
         
         [self initializeAudioEngine];
-        [self initializeChannelGroup];
         
         self.numberOfrecordingSlotsAvailable = recordingSlots;
         self.recordingFormat = recordingFormat;
@@ -125,6 +124,9 @@
     if (slotNumber <= self.numberOfrecordingSlotsAvailable) {
         
         if (!self.recorder) {
+            
+            [self initializeChannelGroup];
+            
             self.recorder = [[AERecorder alloc] initWithAudioController:_audioController];
             
             NSString *filePath = [self.tempFilePathsArray objectAtIndex:slotNumber];
@@ -134,13 +136,14 @@
                                               fileType:[self getFileFormatType]
                                                  error:&error] ) {
                 NSLog(@"Error setting up TAAE sound recorder: %@", [error localizedDescription]);
+                [self.delegate CATAudioBoxError:CATAUDIO_BOX_ERROR_RECORDING];
                 return NO;
             }
             
             [_audioController setVolume:1 forChannelGroup:self.mainChannelGroup];
             [_audioController addFilter:[self addHighPassFilter] toChannelGroup:self.mainChannelGroup];
             [_audioController addFilter:[self addCompressor]toChannelGroup:self.mainChannelGroup];
-            [_audioController addFilter:[self addLimiter]toChannelGroup:self.mainChannelGroup];   // are these effects added in parallel or serial?
+            [_audioController addFilter:[self addLimiter]toChannelGroup:self.mainChannelGroup];   // are these effects added in parallel or serial? need to investigate
             [_audioController addInputReceiver:_recorder];
             
             [self.recordedFilesTrackerDict setObject:@YES forKey:[NSString stringWithFormat:@"%d",slotNumber]];
@@ -183,6 +186,7 @@
                 };
             } else {
                 NSLog(@"Error playing TAAE sound file");
+                [self.delegate CATAudioBoxError:CATAUDIO_BOX_ERROR_PLAYBACK];
                 return NO;
             }
         }
@@ -224,11 +228,7 @@
         });
         
     } else {
-        
-        [_audioController removeInputReceiver:_recorder];
-        [_recorder finishRecording];
-        self.recorder = nil;
-        
+        [self removeAudioRecorder];
         [self.delegate CATAudioBoxDidFinishRecording];
     }
 }
@@ -236,7 +236,13 @@
 -(void)setVolume:(float)volume OnChanelGroup:(AEChannelGroupRef)channelGroup
 {
     [_audioController setVolume:volume forChannelGroup:channelGroup];
-    NSLog(@"Volume Fade: %f", volume);
+}
+
+-(void)removeAudioRecorder
+{
+    [_audioController removeInputReceiver:_recorder];
+    [_recorder finishRecording];
+    self.recorder = nil;
 }
 
 #pragma mark - Recording Stop Timer
@@ -259,24 +265,29 @@
     AudioFileTypeID audioFileType = 0;
     
     switch (self.recordingFormat) {
-        case CATAUDIO_CONTROLLER_FORMAT_MP3:
+        case CATAUDIO_BOX_FORMAT_MP3:
             NSAssert(!TARGET_OS_MAC,@"MP3 encoding can only be used on OSX (unless you have an 3rd party codec) sorry");
             audioFileType = kAudioFileMP3Type;
             break;
-        case CATAUDIO_CONTROLLER_FORMAT_M4A:
+        case CATAUDIO_BOX_FORMAT_M4A:
             audioFileType = kAudioFileM4AType;
             break;
-        case CATAUDIO_CONTROLLER_FORMAT_AIFF:
+        case CATAUDIO_BOX_FORMAT_MP4:
+            audioFileType = kAudioFileMPEG4Type;
+            break;
+        case CATAUDIO_BOX_FORMAT_AAC:
+            audioFileType = kAudioFileAAC_ADTSType;
+            break;
+        case CATAUDIO_BOX_FORMAT_AIFF:
             audioFileType = kAudioFileAIFFType;
             break;
-        case CATAUDIO_CONTROLLER_FORMAT_WAV:
+        case CATAUDIO_BOX_FORMAT_WAV:
             audioFileType = kAudioFileWAVEType;
             break;
         default:
             audioFileType = kAudioFileAIFFType;
             break;
     }
-    
     return audioFileType;
 }
 
@@ -285,20 +296,26 @@
     NSString *audioFileExtension;
     
     switch (self.recordingFormat) {
-        case CATAUDIO_CONTROLLER_FORMAT_MP3:
+        case CATAUDIO_BOX_FORMAT_MP3:
             audioFileExtension = @"mp3";
             break;
-        case CATAUDIO_CONTROLLER_FORMAT_M4A:
+        case CATAUDIO_BOX_FORMAT_M4A:
             audioFileExtension = @"m4a";
             break;
-        case CATAUDIO_CONTROLLER_FORMAT_AIFF:
+        case CATAUDIO_BOX_FORMAT_MP4:
+            audioFileExtension = @"mp4";
+            break;
+        case CATAUDIO_BOX_FORMAT_AAC:
+            audioFileExtension = @"aac";
+            break;
+        case CATAUDIO_BOX_FORMAT_AIFF:
             audioFileExtension = @"aiff";
             break;
-        case CATAUDIO_CONTROLLER_FORMAT_WAV:
+        case CATAUDIO_BOX_FORMAT_WAV:
             audioFileExtension = @"wav";
             break;
         default:
-            audioFileExtension = @"m4a";
+            audioFileExtension = @"aiff";
             break;
     }
     return audioFileExtension;
