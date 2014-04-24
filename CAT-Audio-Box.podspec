@@ -8,9 +8,9 @@ Pod::Spec.new do |s|
                
                <h1>CAT-Audio-Box</h1>
 
-Multi 'slot' audio recorder / player built on top of 'The Amazing Audio Engine' by Michael Tyson.
+      Multi 'slot' audio recorder / player built on top of 'The Amazing Audio Engine' by Michael Tyson.
 
-Created to replace the multiple AVAudioRecorders I had in one of my apps. CAT-Audio-Box records or plays one track at a time in the same style as a traditional tape recorder, but benefits from the additional features / expandability of CoreAudio. 
+      Created to replace the multiple AVAudioRecorders I had in one of my apps. CAT-Audio-Box records or plays one track at a time in the same style as a traditional tape recorder, but benefits from the additional features / expandability of CoreAudio. 
 
 <h2>Features:</h2>
 <ul>
@@ -23,7 +23,7 @@ Created to replace the multiple AVAudioRecorders I had in one of my apps. CAT-Au
 
 DESC
 
-  s.homepage            = "https://github.com/carltaylor43/CAT-Audio-Box"
+  s.homepage           = "https://github.com/carltaylor43/CAT-Audio-Box"
   s.author             = { "Carl Taylor" => "carltaylor43uk@gmail.com" }
   s.social_media_url   = "https://twitter.com/carltaylordev"
   s.source             = {
@@ -33,7 +33,7 @@ DESC
 
   s.source_files  = "*.{h,m}"
   s.exclude_files = "AudioBoxDemo"
-  s.platform      = :ios
+  s.platform      = :ios, '5.1'
 
   s.requires_arc = true  
   s.dependency "TheAmazingAudioEngine", '~> 1.3'
