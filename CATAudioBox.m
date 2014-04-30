@@ -143,7 +143,7 @@
             [_audioController setVolume:1 forChannelGroup:self.mainChannelGroup];
             [_audioController addFilter:[self addHighPassFilter] toChannelGroup:self.mainChannelGroup];
             [_audioController addFilter:[self addCompressor]toChannelGroup:self.mainChannelGroup];
-            [_audioController addFilter:[self addLimiter]toChannelGroup:self.mainChannelGroup];   // are these effects added in parallel or serial? need to investigate
+            [_audioController addFilter:[self addLimiter]toChannelGroup:self.mainChannelGroup];  
             [_audioController addInputReceiver:_recorder];
             
             [self.recordedFilesTrackerDict setObject:@YES forKey:[NSString stringWithFormat:@"%d",slotNumber]];
